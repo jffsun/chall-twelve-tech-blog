@@ -1,9 +1,9 @@
 const router = require('express').Router();
 
 // Import home-routes.js router file
-const homeRoutes = require('./home-routes');
+const loggedInRoutes = require('./logged-in-routes');
 
-// Endpoint of '/'
-router.use('/', homeRoutes);
+// Endpoint of '/logged-in'
+router.use('/logged-in', loggedInRoutes);
 
 module.exports = router;

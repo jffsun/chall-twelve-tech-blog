@@ -1,12 +1,12 @@
 const router = require('express').Router();
-const { Post } = require("../models");
-var colors = require('colors');
+const { Post, Comment } = require("../models");
 
 // At '/' endpoint GET all posts
 router.get("/", async (req, res) => {
     try {
         // Get all records from Post table
         const postData = await Post.findAll({
+            include: { model: Comment },
             attributes: [
                 'title',
                 'content'
@@ -20,10 +20,10 @@ router.get("/", async (req, res) => {
         post.get({ plain: true })
         );
 
-        console.log(allPosts.green);
+        res.status(200).json(allPosts);
 
         // Render data to front end using all.handlebars
-        res.render('all', { allPosts });
+        // res.render('all', { allPosts });
     } catch (err) {
         console.log(err)
         res.status(500).json(err)
