@@ -1,6 +1,16 @@
-<div class="menu-container">
-  <div class="card-header col-md-12 text-center">
-    <h2>
-      &#127869 All posts
-    </h2>
+<header>
+  <div class="pt-3 text-center bg-primary opacity-100" style="margin-top: 0px;">
+  <h1 class="mb-1 text-light">Message Board</h1>
+  <nav class="text-left">
+    <a class="w-5 btn mt-2 mb-2 ml-2 btn-med btn-warning updateSubmit" href="/api/parent">Go back</a>
+  </nav>
   </div>
+</header>
+
+<section class="container">
+  <div class="flex-row overflow-auto list">
+    {{#each posts as |post|}}
+    {{> post-details}}
+    {{/each}}
+  </div>
+</section>
