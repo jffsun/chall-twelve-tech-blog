@@ -1,9 +1,12 @@
 const router = require('express').Router();
-const { User, Post, Comment } = require("../models");
+const { User, Post, Comment } = require("../../models");
+var colors = require('colors');
 
 // At '/logged-in' endpoint
 // TO DO: ADD - Require Authorization
 router.get("/", async (req, res) => {
+    console.log('logged-in route.js'.red)
+
     try {
         // Get all records from Post table with comments and User who posted
         const postData = await Post.findAll({

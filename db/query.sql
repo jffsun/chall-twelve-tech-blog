@@ -12,7 +12,7 @@ SELECT
   comment.text,
   comment.post_id AS belongs_to_post,
   comment.user_id,
-  user.id,
+  user.id AS userid,
   user.username
 FROM post
 JOIN comment
