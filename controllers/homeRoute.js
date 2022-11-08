@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Post, Comment } = require("../models");
+const { Post } = require("../models");
 
 // At '/' endpoint
 router.get("/", async (req, res) => {
@@ -23,6 +23,7 @@ router.get("/", async (req, res) => {
 
         // Render data to front end using all.handlebars
         // res.render('all', { allPosts });
+        
     } catch (err) {
         console.log(err)
         res.status(500).json(err)

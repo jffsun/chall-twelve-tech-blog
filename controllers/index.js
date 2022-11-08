@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const loginRoute = require('./login-route')
-const homeRoutes = require('./home-routes');
+const loginRoute = require('./loginRoute')
+const homeRoute = require('./homeRoute');
 const apiRoutes = require('./api');
 var colors = require('colors');
 
-router.use('/', homeRoutes);
+router.use('/', homeRoute);
 router.use('/login', loginRoute);
 router.use('/api', apiRoutes);
 

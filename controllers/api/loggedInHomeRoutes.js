@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const { User, Post, Comment } = require("../../models");
 var colors = require('colors');
+// Routes mounted at ('/api/loggedIn')
 
-// At '/api/logged-in/' endpoint GET all posts
+// GET all posts
 // TO DO: ADD - Require Authorization; 
 router.get("/", async (req, res) => {
     try {
@@ -31,7 +32,7 @@ router.get("/", async (req, res) => {
     };
 });
 
-// At 'api/logged-in/:id' endpoint GET Post and its comments that user clicks
+// GET Post by ID and its comment(s)
 // TO DO: ADD - Require Authorization
 router.get("/post/:id", async (req, res) => {
 
@@ -48,7 +49,7 @@ router.get("/post/:id", async (req, res) => {
                 'title',
                 'content',
                 // Specify created date since user is logged in
-                // TO DO: Format to only show date  
+                // TO DO: Format to show shorthand date  
                 'created_at'
             ],
         });
@@ -56,7 +57,6 @@ router.get("/post/:id", async (req, res) => {
         // Serialize data retrieved
         const onePost = postData.get({ plain: true });
 
-        // console.log(onePost);
         res.status(200).json(onePost);
 
         //  TO DO: Render post data to front end using single-post.handlebars
@@ -68,7 +68,7 @@ router.get("/post/:id", async (req, res) => {
     };
 });
 
-// At 'api/logged-in/:id' endpoint POST a comment to current Post
+// POST a comment to a post 
 // TO DO: ADD - Require Authorization
 router.post("/post/:id", async (req, res) => {
     try {
@@ -84,44 +84,6 @@ router.post("/post/:id", async (req, res) => {
             user_id: req.session.user_id
         })
         res.status(200).json({newComment, message : `Comment added!`})
-
-    } catch (err) {
-        console.log(err)
-        res.status(500).json(err)
-    };
-});
-
-// At 'api/logged-in/dashboard' endpoint GET all posts from User logged in
-// TO DO: ADD - Require Authorization
-router.get("/dashboard", async (req, res) => {
-    try {    
-        // console.log('dashboard endpoint reached'.green);
-        console.log(req.session.user_id);
-        const myPostData = await Post.findAll({
-            where: {
-                user_id: req.session.user_id
-            },
-            include: { model: Comment },
-            attributes: [
-                'title',
-                'content',
-                // Specify created date since user is logged in
-                // TO DO: Format to only show date  
-                'created_at'
-            ]
-        });
-
-        // Create array of each post retrieved
-        const allMyPosts = myPostData.map((post) =>
-
-        // Serialize data
-        post.get({ plain: true })
-        );
-
-        res.status(200).json(allMyPosts);
-
-        // TO DO: Render data to front end using dashboard.handlebars
-        // res.render('dashboard', { allMyPosts });
 
     } catch (err) {
         console.log(err)
