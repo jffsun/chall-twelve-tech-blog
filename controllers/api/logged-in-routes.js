@@ -33,7 +33,7 @@ router.get("/", async (req, res) => {
 
 // At 'api/logged-in/:id' endpoint GET Post and its comments that user clicks
 // TO DO: ADD - Require Authorization
-router.get("/:id", async (req, res) => {
+router.get("/post/:id", async (req, res) => {
 
     try {
         const postData = await Post.findOne({
@@ -53,13 +53,11 @@ router.get("/:id", async (req, res) => {
             ],
         });
 
-        // console.log(postData);
-
         // Serialize data retrieved
-        // const onePost = postData.get({ plain: true });
+        const onePost = postData.get({ plain: true });
 
         // console.log(onePost);
-        res.status(200).json(postData);
+        res.status(200).json(onePost);
 
         //  TO DO: Render post data to front end using single-post.handlebars
         // res.render('post', { OnePost });
@@ -72,7 +70,7 @@ router.get("/:id", async (req, res) => {
 
 // At 'api/logged-in/:id' endpoint POST a comment to current Post
 // TO DO: ADD - Require Authorization
-router.post("/:id", async (req, res) => {
+router.post("/post/:id", async (req, res) => {
     try {
         const newComment = await Comment.create({
 
@@ -97,11 +95,11 @@ router.post("/:id", async (req, res) => {
 // TO DO: ADD - Require Authorization
 router.get("/dashboard", async (req, res) => {
     try {    
-        console.log('dashboard endpoint reached'.green);
-
+        // console.log('dashboard endpoint reached'.green);
+        console.log(req.session.user_id);
         const myPostData = await Post.findAll({
             where: {
-                user_id: 1
+                user_id: req.session.user_id
             },
             include: { model: Comment },
             attributes: [
@@ -113,18 +111,14 @@ router.get("/dashboard", async (req, res) => {
             ]
         });
 
-        // console.log(req.session.user_id.red);
+        // Create array of each post retrieved
+        const allMyPosts = myPostData.map((post) =>
 
-        // console.log(myPostData.green);
+        // Serialize data
+        post.get({ plain: true })
+        );
 
-        // // // // Create array of each post retrieved
-        // const allMyPosts = myPostData.map((post) =>
-
-        // // Serialize data
-        // post.get({ plain: true })
-        // );
-
-        res.status(200).json(myPostData);
+        res.status(200).json(allMyPosts);
 
         // TO DO: Render data to front end using dashboard.handlebars
         // res.render('dashboard', { allMyPosts });
