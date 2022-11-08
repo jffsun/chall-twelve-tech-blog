@@ -1,12 +1,11 @@
 const router = require('express').Router();
 const { Post, Comment } = require("../models");
 
-// At '/' endpoint GET all posts
+// At '/' endpoint
 router.get("/", async (req, res) => {
     try {
-        // Get all records from Post table
+        // GET all Posts from Post table
         const postData = await Post.findAll({
-            include: { model: Comment },
             attributes: [
                 'title',
                 'content'
