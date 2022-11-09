@@ -1,6 +1,6 @@
 <header>
   <div class="pt-3 text-center bg-primary opacity-100" style="margin-top: 0px;">
-  <h1 class="mb-1 text-light">Message Board</h1>
+  <h1 class="mb-1 text-light">Posts</h1>
   <nav class="text-left">
     <a class="w-5 btn mt-2 mb-2 ml-2 btn-med btn-warning updateSubmit" href="/api/parent">Go back</a>
   </nav>
@@ -9,7 +9,7 @@
 
 <section class="container">
   <div class="flex-row overflow-auto list">
-    {{#each posts as |post|}}
+    {{#each allPosts as |post|}}
     {{> post-details}}
     {{/each}}
   </div>

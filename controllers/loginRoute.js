@@ -1,7 +1,29 @@
 const router = require('express').Router();
 const { User } = require("../models");
 
-// At '/login' endpoint
+// Routes mounted at ('/login') endpoint
+
+// User signs up 
+router.post('/', async (req, res) => {
+     try {
+          // Create a new user
+          const newUser = await User.create({
+               
+               username: req.body.username,
+               email: req.body.email, 
+               password: req.body.password
+          });
+          
+          res.status(200).json({newUser, message : `User created! You may now login.`});
+          // Refresh form and have user login.
+
+      } catch (err) {
+          console.log(err)
+          res.status(500).json(err)
+      }
+});
+
+// User logs in
 router.post('/', async (req, res) => {
      try {
           // Find the user who matches with the email in the database
@@ -31,5 +53,7 @@ router.post('/', async (req, res) => {
           res.render('404')
       }
 });
+
+
 
 module.exports = router; 

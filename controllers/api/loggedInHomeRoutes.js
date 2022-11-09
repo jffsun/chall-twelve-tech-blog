@@ -9,6 +9,7 @@ router.get("/", async (req, res) => {
     try {
         const postData = await Post.findAll({
             attributes: [
+                'id',
                 'title',
                 'content'
             ],
@@ -46,6 +47,7 @@ router.get("/post/:id", async (req, res) => {
                 { model: User},
             ],
             attributes: [
+                'id',
                 'title',
                 'content',
                 // Specify created date since user is logged in
@@ -90,5 +92,38 @@ router.post("/post/:id", async (req, res) => {
         res.status(500).json(err)
     };
 });
+
+// UPDATE a comment of a post
+// TO DO: ADD - Require Authorization
+router.put("/post/:id", async (req, res) => {
+    try {
+        const updatedComment = await Comment.update({
+
+            // Define body of POST request
+            text: req.body.text,
+
+            // Updating the comment of the post ID in the URL
+            post_id: req.params.id,
+
+            // Use session info to define the user_id 
+            user_id: req.session.user_id
+        },
+        {
+            // Will target the comment that user clicks on (FRONT END
+            // FE: Give each comment a container ID, get ID upon click, include that ID in req.body of fetch request
+            // 
+            where: {
+                id: req.body.id
+            },
+        }
+        )
+        res.status(200).json({updatedComment, message : `Comment updated!`})
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err)
+    };
+});
+
 
 module.exports = router;

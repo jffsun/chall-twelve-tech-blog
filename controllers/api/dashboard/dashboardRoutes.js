@@ -1,14 +1,17 @@
 const router = require('express').Router();
-const { Post, Comment } = require("../../../models");
+const { User, Post, Comment } = require("../../../models");
 var colors = require('colors');
+
 // Routes mounted at ('/api/loggedIn/dashboard') 
 
 // GET all posts from User logged in
 // TO DO: ADD - Require Authorization
 router.get("/", async (req, res) => {
     try {    
+        console.log(req.session.user_id);
 
         const myPostData = await Post.findAll({
+            // TO DO: Request not picking up session.user_id
             where: {
                 user_id: req.session.user_id
             },
@@ -40,6 +43,28 @@ router.get("/", async (req, res) => {
         res.status(500).json(err)
     };
 });
+
+// POST a post from dashboard 
+// TO DO: ADD - Require Authorization
+router.post("/", async (req, res) => {
+    try {
+        const newPost = await Post.create({
+
+            // Define body of POST request
+            title: req.body.title,
+            content: req.body.content,
+
+            // Use session info to define the user_id 
+            user_id: req.session.user_id
+        });
+        res.status(200).json({newPost, message : `Post added!`})
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err)
+    };
+});
+
 
 // GET a post from dashboard by ID
 // TO DO: ADD - Require Authorization
@@ -79,27 +104,6 @@ router.get("/mypost/:id", async (req, res) => {
     };
 });
 
-// POST a post from dashboard 
-// TO DO: ADD - Require Authorization
-router.post("/", async (req, res) => {
-    try {
-        const newPost = await Post.create({
-
-            // Define body of POST request
-            title: req.body.title,
-            content: req.body.content,
-
-            // Use session info to define the user_id 
-            user_id: req.session.user_id
-        })
-        res.status(200).json({newPost, message : `Post added!`})
-
-    } catch (err) {
-        console.log(err)
-        res.status(500).json(err)
-    };
-});
-
 // Delete a post from user's dashboard
 // TO DO: ADD - Require Authorization
 router.delete("/mypost/:id", async (req, res) => {
@@ -118,28 +122,28 @@ router.delete("/mypost/:id", async (req, res) => {
     };
 });
 
-// // update announcement from board
-// router.put("/", auth, async (req, res) => {
-//     try {
-//         const updatedAnnouncement = await Board.update(
-//             {
-//                 title: req.body.title,
-//                 messsage: req.body.message,
-//                 where: req.body.where,
+// Update a post from user's dashboard 
+// TO DO: ADD - Require Authorization
+router.put("/mypost/:id", async (req, res) => {
+    try {
+        const updatePost = await Post.update({
+            
+            // Define body of PUT request
+            title: req.body.title,
+            content: req.body.content,
+            user_id: req.session.user_id
+        },
+        {
+            where: {
+                id: req.params.id
+            },
+        });
+        res.status(200).json({updatePost, message : `Post Updated!`})
 
-//                 // format to sql date format
-//                 when: new Date('"'+req.body.when+'"').toISOString().slice(0, 19).replace('T', ' ')
-//             },
-//             {
-//             where: {
-//                 id: req.body.id,
-//             },
-//     });
-//     res.status(200).json(updatedAnnouncement);
-//     } catch(err) {
-//         console.log(err);
-//         res.status(500).json(err);
-//     };
-// });
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err)
+    };
+});
 
 module.exports = router;

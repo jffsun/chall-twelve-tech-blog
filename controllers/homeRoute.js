@@ -7,6 +7,7 @@ router.get("/", async (req, res) => {
         // GET all Posts from Post table
         const postData = await Post.findAll({
             attributes: [
+                'id',
                 'title',
                 'content'
             ],
@@ -19,10 +20,10 @@ router.get("/", async (req, res) => {
         post.get({ plain: true })
         );
 
-        res.status(200).json(allPosts);
+        // res.status(200).json(allPosts);
 
-        // Render data to front end using all.handlebars
-        // res.render('all', { allPosts });
+        // Render all posts
+        res.render('home', { allPosts });
         
     } catch (err) {
         console.log(err)
