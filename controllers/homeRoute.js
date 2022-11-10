@@ -20,9 +20,7 @@ router.get("/", async (req, res) => {
         post.get({ plain: true })
         );
 
-        // res.status(200).json(allPosts);
-
-        // Render all posts
+        // Render all posts with home.handlebars
         res.render('home', { allPosts });
         
     } catch (err) {
@@ -30,5 +28,7 @@ router.get("/", async (req, res) => {
         res.status(500).json(err)
     };
 });
+
+
 
 module.exports = router;

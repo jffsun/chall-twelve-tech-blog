@@ -3,20 +3,11 @@ const { User } = require("../models");
 
 // Routes mounted at ('/login') endpoint
 
-// User signs up 
-router.post('/', async (req, res) => {
+// Render login page
+router.get('/', async (req, res) => {
      try {
-          // Create a new user
-          const newUser = await User.create({
-               
-               username: req.body.username,
-               email: req.body.email, 
-               password: req.body.password
-          });
+          res.render('login');
           
-          res.status(200).json({newUser, message : `User created! You may now login.`});
-          // Refresh form and have user login.
-
       } catch (err) {
           console.log(err)
           res.status(500).json(err)
@@ -54,6 +45,35 @@ router.post('/', async (req, res) => {
       }
 });
 
+// Render registration page
+router.get('/register', async (req, res) => {
+     try {
+          res.render('register');
+          
+      } catch (err) {
+          console.log(err)
+          res.status(500).json(err)
+      }
+});
 
+// User registers a new account
+router.post('/register', async (req, res) => {
+     try {
+          // Create a new user
+          const newUser = await User.create({
+               
+               username: req.body.username,
+               email: req.body.email, 
+               password: req.body.password
+          });
+          
+          res.status(200).json({newUser, message : `User created! You may now login.`});
+          // Refresh form and have user login.
+
+      } catch (err) {
+          console.log(err)
+          res.status(500).json(err)
+      }
+});
 
 module.exports = router; 

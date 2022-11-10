@@ -7,27 +7,27 @@
 </header>
 
 {{!-- Log-in container --}}
-<main class="container border log-in mt-3 w-25 border-info rounded ">
+<main class="container border register mt-3 w-25 border-info rounded ">
   <form>
-    <h1 class="h3 mb-3 mt-3 fw-normal">User Log-In</h1>
+    <h1 class="h3 mb-3 mt-3 fw-normal">Register New Account</h1>
 
     <div class="form-floating mb-1">
-      <input type="email" class="form-control" id="userEmail" placeholder="Enter your email">
+      <input type="username" class="form-control" id="newUsername" placeholder="Username">
+    </div>
+
+    <div class="form-floating mb-1">
+      <input type="email" class="form-control" id="newEmail" placeholder="Email"> 
     </div>
 
     <div class="form-floating">
-      <input type="password" class="form-control" id="userPassword" placeholder="Password">
+      <input type="password" class="form-control" id="newPassword" placeholder="Password">
     </div>
 
-    <button class="w-75 btn mt-2 mb-2 btn-med btn-primary" id="loginBtn" type="submit">Sign in</button>
-
-    <a class="w-755 btn mt-2 mb-2 btn-med btn-primary" id="registerBtn2" href="/login/register">New? Sign Up</a>
-
+    <button class="w-75 btn mt-2 mb-2 btn-med btn-primary" id="registerBtn" type="submit">Register</button>
   </form>
 </main>
 
 <div class="h5 mb-3 mt-3">The Tech Blog LLC</div>
-  
 
 <!-- Including Bootstrap JS (with its jQuery dependency) so that dynamic components work -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
