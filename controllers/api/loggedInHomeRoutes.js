@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const { User, Post, Comment } = require("../../models");
+const sequelize = require('../../config/connection');
 var colors = require('colors');
+
 // Routes mounted at ('/api/loggedIn')
 
 // GET all posts
@@ -11,10 +13,21 @@ router.get("/", async (req, res) => {
             attributes: [
                 'id',
                 'title',
-                'content'
+                'content',
+                // GET timestamp of post creation since user is logged in
+                [
+                    sequelize.fn
+                    (
+                      // Convert YYYY-MM-DDTHH:MM:SSZ timestamp format to MM-DD-YYYY
+                      "DATE_FORMAT", 
+                      sequelize.col("created_at"), 
+                      "%m/%d/%Y"
+                    ),
+                    "created_at",
+                ],
             ],
         });
-
+        
         // Create array of each post retrieved
         const allPosts = postData.map((post) =>
 
@@ -22,10 +35,11 @@ router.get("/", async (req, res) => {
         post.get({ plain: true })
         );
 
-        res.status(200).json(allPosts);
+        console.log(allPosts[0].created_at);
+        console.log(req.session.logged_in);
 
-        // TO DO: Render data to front end using all.handlebars
-        // res.render('all', { allPosts });
+        // Render all posts with home.handlebars
+        res.render('home', { allPosts });
 
     } catch (err) {
         console.log(err)
@@ -39,30 +53,56 @@ router.get("/post/:id", async (req, res) => {
 
     try {
         const postData = await Post.findOne({
-            where: {
-                id: req.params.id
-            },
             include: [
-                { model: Comment },
-                { model: User},
+                { 
+                    model: Comment,
+                    // Raw SQL statement to join user_id with username?
+                    attributes: ['text', 
+                    'user_id',
+                    [
+                        sequelize.fn
+                        (
+                          "DATE_FORMAT", 
+                          sequelize.col("comments.created_at"), 
+                          "%m/%d/%Y"
+                        ),
+                        "created_at",
+                    ],
+                    ], 
+                },
+                { 
+                    model: User,
+                    attributes: ['username']
+                },
             ],
             attributes: [
                 'id',
                 'title',
                 'content',
-                // Specify created date since user is logged in
-                // TO DO: Format to show shorthand date  
-                'created_at'
+                [
+                    sequelize.fn
+                    (
+                      "DATE_FORMAT", 
+                      sequelize.col("post.created_at"), 
+                      "%m/%d/%Y"
+                    ),
+                    "created_at",
+                ],
             ],
+            where: {
+                id: req.params.id
+            },
+            // include: [{ model: User }, { model: Comment }],
+
         });
 
         // Serialize data retrieved
         const onePost = postData.get({ plain: true });
 
-        res.status(200).json(onePost);
+        console.log(onePost);
 
         //  TO DO: Render post data to front end using single-post.handlebars
-        // res.render('post', { OnePost });
+        res.render('post', { onePost });
 
     } catch (err) {
         console.log(err)

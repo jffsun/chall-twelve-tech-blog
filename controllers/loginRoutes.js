@@ -48,9 +48,9 @@ router.post('/', async (req, res) => {
 
           // Save the user's id to the session
           req.session.user_id = currentUser.id;
+          });
 
           res.json('Logged in successfully!');
-          });
       } catch (err) {
           console.log(err)
           res.status(500).json(err)
@@ -71,8 +71,6 @@ router.get('/register', async (req, res) => {
 router.post('/register', async (req, res) => {
      try {
 
-        console.log('REGISTER ROUTE REACHED');
-
           // Create a new user
           const newUser = await User.create({
                
@@ -81,7 +79,18 @@ router.post('/register', async (req, res) => {
                password: req.body.password
           });
 
-          res.status(200).json({newUser, message : `User created! You may now login.`});
+
+        console.log(newUser);
+
+        // Save user's session
+        req.session.save(() => {
+        req.session.logged_in = true;
+
+        // Save the user's id to the session
+        req.session.user_id = newUser.id;
+        });
+
+        res.status(200).json({newUser, message : 'Account created!'});
       } catch (err) {
           console.log(err)
           res.status(500).json(err)

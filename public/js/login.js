@@ -31,8 +31,6 @@ const userLoginHandler = async (event) => {
       if (response.ok) {
         document.location.replace('/api/loggedIn');
 
-        // console.log('userLogin function Successful')
-
       } else {
         alert(response.statusText);
       }
@@ -41,8 +39,6 @@ const userLoginHandler = async (event) => {
 
 // Creates a new user's credentials
 const userRegisterHandler = async (event) => {
-
-  console.log('userRegister function called')
 
   // Stop browser from immediately submitting the form
   event.preventDefault();
@@ -65,14 +61,13 @@ const userRegisterHandler = async (event) => {
       }),
       headers: { 'Content-Type': 'application/json' }
     });
-    
-    console.log(newUsername);
-    console.log(newEmail);
-    console.log(newPassword);
 
     if (response.ok) {
-      alert("Account Created! You may log in.");
-      // document.location.replace('/login');
+      alert("Account Created!");
+      
+      // If
+      document.location.replace('/api/loggedIn');
+
     } else {
       alert('Failed to register your account');
     };
