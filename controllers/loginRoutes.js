@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const { User } = require("../models");
+const bcrypt = require('bcrypt');
 
-// Routes mounted at ('/login') endpoint
+// Routes mounted to ('/login') 
 
 // Render login page
 router.get('/', async (req, res) => {
@@ -9,39 +10,50 @@ router.get('/', async (req, res) => {
           res.render('login');
           
       } catch (err) {
-          console.log(err)
-          res.status(500).json(err)
-      }
+          console.log(err);
+          res.status(500).json(err);
+      };
 });
 
 // User logs in
 router.post('/', async (req, res) => {
      try {
           // Find the user who matches with the email in the database
-          const loginCheck = await User.findOne({where: {email:  req.body.email, password: req.body.password}});
+          const userData = await User.findOne({ where: { email:  req.body.email } });
   
-          // If username or password wrong, send a incorrect message to the user
-          if (!loginCheck) {
-               res.status(401).json({ message: 'Incorrect email or password, please try again.' });
+          // If user's email can't be found send invalid message to user
+          if (!userData) {
+               res.status(401).json({ message: 'Invalid credentials. Please try again.' });
                return; 
           }
+          
+          // Use bcrypt compare method to compare the provided password against hashed password
+          const validPassword = await bcrypt.compare(
+               req.body.password,
+               userData.password
+          );
+            
+           // If they do not match, return error message
+          if (!validPassword) {
+               res.status(400).json({ message: 'Login failed. Please try again!' });
+               return;
+          };
+  
+          // If password matches, serialize retrieved user data
+          const currentUser = userData.get({ plain: true });
 
-          // Serialize retrieved User's data
-          const currentUser = loginCheck.get({ plain: true });
-
+          // Save user's session
           req.session.save(() => {
           req.session.logged_in = true;
 
-          // Save current User's ID to the session
+          // Save the user's id to the session
           req.session.user_id = currentUser.id;
 
           res.json('Logged in successfully!');
-          // TO DO: Redirect them to logged in homepage
-
           });
-          
       } catch (err) {
-          res.render('404')
+          console.log(err)
+          res.status(500).json(err)
       }
 });
 
@@ -49,7 +61,6 @@ router.post('/', async (req, res) => {
 router.get('/register', async (req, res) => {
      try {
           res.render('register');
-          
       } catch (err) {
           console.log(err)
           res.status(500).json(err)
@@ -66,14 +77,11 @@ router.post('/register', async (req, res) => {
                email: req.body.email, 
                password: req.body.password
           });
-          
           res.status(200).json({newUser, message : `User created! You may now login.`});
-          // Refresh form and have user login.
-
       } catch (err) {
           console.log(err)
           res.status(500).json(err)
-      }
+      };
 });
 
 module.exports = router; 

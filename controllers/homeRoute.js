@@ -1,10 +1,10 @@
+// Routes at ('/') endpoint
 const router = require('express').Router();
 const { Post } = require("../models");
 
-// At '/' endpoint
+// GET all Posts from Post table
 router.get("/", async (req, res) => {
     try {
-        // GET all Posts from Post table
         const postData = await Post.findAll({
             attributes: [
                 'id',
@@ -22,13 +22,12 @@ router.get("/", async (req, res) => {
 
         // Render all posts with home.handlebars
         res.render('home', { allPosts });
-        
+    
+    // Handles errors
     } catch (err) {
         console.log(err)
         res.status(500).json(err)
     };
 });
-
-
 
 module.exports = router;

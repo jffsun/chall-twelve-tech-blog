@@ -23,7 +23,7 @@ async function userLogin(event) {
       
       // 401 status code if invalid authentification credentials
       if (response.status === 401) {
-        alert("Incorrect email or password.");
+        alert("Incorrect email or password. Please try again.");
         return;
       }
       

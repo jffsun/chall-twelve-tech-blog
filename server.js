@@ -3,8 +3,6 @@ const express = require('express');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
 const routes = require('./controllers');
-// UNCOMMENT when rendering home page 
-// const helpers = require('./utils/helper');
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
@@ -15,6 +13,7 @@ const PORT = process.env.PORT || 3001;
 // Instance of Express handlebars
 const hbs = exphbs.create({ });
 
+// Define session attributes
 const sess = {
     secret: 'Super secret secret',
     cookie: {
@@ -37,6 +36,7 @@ const sess = {
   app.engine('handlebars', hbs.engine);
   app.set('view engine', 'handlebars');
   
+  // Middleware to parse requests
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
