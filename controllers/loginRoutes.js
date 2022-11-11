@@ -70,6 +70,9 @@ router.get('/register', async (req, res) => {
 // User registers a new account
 router.post('/register', async (req, res) => {
      try {
+
+        console.log('REGISTER ROUTE REACHED');
+
           // Create a new user
           const newUser = await User.create({
                
@@ -77,6 +80,7 @@ router.post('/register', async (req, res) => {
                email: req.body.email, 
                password: req.body.password
           });
+
           res.status(200).json({newUser, message : `User created! You may now login.`});
       } catch (err) {
           console.log(err)

@@ -1,14 +1,14 @@
-// Credential verification
-async function userLogin(event) {
+// Verifies credentials to login
+const userLoginHandler = async (event) => {
 
     // Stop browser from immediately submitting the form
     event.preventDefault();
 
-    // Gather input from form elements on the page
+    // Gather input from form elements on login page
     const email = document.querySelector('#userEmail').value.trim();
     const password = document.querySelector('#userPassword').value.trim();
   
-    // If value for email and password
+    // If value exists for email and password
     if (email && password) {
 
       // Send POST request with email and password to server
@@ -29,9 +29,9 @@ async function userLogin(event) {
       
       // If valid credentials, redirect user to loggedIn homepage
       if (response.ok) {
-        // document.location.replace('/api/loggedIn');
+        document.location.replace('/api/loggedIn');
 
-        console.log('userLogin function Successful')
+        // console.log('userLogin function Successful')
 
       } else {
         alert(response.statusText);
@@ -39,8 +39,8 @@ async function userLogin(event) {
     }
   };
 
-  // Credential creation
-async function userRegister(event) {
+// Creates a new user's credentials
+const userRegisterHandler = async (event) => {
 
   console.log('userRegister function called')
 
@@ -59,23 +59,35 @@ async function userRegister(event) {
     const response = await fetch('/login/register', {
       method: 'POST',
       body: JSON.stringify({
-        newUsername,
-        newEmail,
-        newPassword
+        username: newUsername,
+        email: newEmail,
+        password: newPassword
       }),
       headers: { 'Content-Type': 'application/json' }
     });
     
-    // 401 status code if invalid authentification credentials
+    console.log(newUsername);
+    console.log(newEmail);
+    console.log(newPassword);
+
     if (response.ok) {
       alert("Account Created! You may log in.");
-      document.location.replace('/login');
+      // document.location.replace('/login');
     } else {
-      alert(response.statusText);
+      alert('Failed to register your account');
     };
   };
 };
 
 // Event listeners to run login and sign up functions upon submission
-document.querySelector('.log-in').addEventListener('submit', userLogin);  
-document.querySelector('.register').addEventListener('submit', userRegister);  
+var el = document.querySelector('.login-form');
+
+if(el) {
+  el.addEventListener('submit', userLoginHandler);  
+};
+
+var el2 = document.querySelector('.register-form');
+
+if (el2) {
+  el2.addEventListener('submit', userRegisterHandler);  
+}
