@@ -6,3 +6,7 @@
     {{!-- If user is logged in, post's created_at timestamp is retrieved and rendered --}}
     <footer class="text-right">Posted by {{onePost.user.username}} - {{onePost.created_at}}</footer>
 </div>
+
+  {{#each onePost.comments as |comment|}}
+    {{> comment}}
+    {{/each}}

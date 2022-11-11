@@ -10,6 +10,7 @@ var colors = require('colors');
 router.get("/", async (req, res) => {
     try {
         const postData = await Post.findAll({
+            
             attributes: [
                 'id',
                 'title',
@@ -60,13 +61,10 @@ router.get("/post/:id", async (req, res) => {
                     attributes: ['text', 
                     'user_id',
                     [
-                        sequelize.fn
-                        (
-                          "DATE_FORMAT", 
-                          sequelize.col("comments.created_at"), 
-                          "%m/%d/%Y"
-                        ),
-                        "created_at",
+                        sequelize.fn ("DATE_FORMAT",
+                        sequelize.col("comments.created_at"), 
+                        "%m/%d/%Y"),
+                        "created_at"
                     ],
                     ], 
                 },
@@ -80,20 +78,15 @@ router.get("/post/:id", async (req, res) => {
                 'title',
                 'content',
                 [
-                    sequelize.fn
-                    (
-                      "DATE_FORMAT", 
-                      sequelize.col("post.created_at"), 
-                      "%m/%d/%Y"
-                    ),
-                    "created_at",
+                    sequelize.fn ("DATE_FORMAT",
+                    sequelize.col("post.created_at"), 
+                    "%m/%d/%Y"),
+                    "created_at"
                 ],
             ],
             where: {
                 id: req.params.id
             },
-            // include: [{ model: User }, { model: Comment }],
-
         });
 
         // Serialize data retrieved
