@@ -54,25 +54,8 @@ router.get("/post/:id", async (req, res) => {
 
     try {
         const postData = await Post.findOne({
-            include: [
-                { 
-                    model: Comment,
-                    // Raw SQL statement to join user_id with username?
-                    attributes: ['text', 
-                    'user_id',
-                    [
-                        sequelize.fn ("DATE_FORMAT",
-                        sequelize.col("comments.created_at"), 
-                        "%m/%d/%Y"),
-                        "created_at"
-                    ],
-                    ], 
-                },
-                { 
-                    model: User,
-                    attributes: ['username']
-                },
-            ],
+
+            // Include post.id, post.title, post.content, and post.created_at timestamp
             attributes: [
                 'id',
                 'title',
@@ -87,6 +70,28 @@ router.get("/post/:id", async (req, res) => {
             where: {
                 id: req.params.id
             },
+            include: [
+                 // Include User of the post
+                { model: User },
+                { 
+                    // Include the post's comments
+                    model: Comment,
+                     // Include comments.text, comments.user_id, and comments.created_at
+                    attributes: ['text', 
+                    'user_id',
+                    [
+                        sequelize.fn ("DATE_FORMAT",
+                        sequelize.col("comments.created_at"), 
+                        "%m/%d/%Y"),
+                        "created_at"
+                    ],
+                    ], 
+                    include: [{
+                        // Include usernames of those who posted comments
+                        model: User
+                    }],
+                },
+            ],
         });
 
         // Serialize data retrieved
@@ -94,7 +99,6 @@ router.get("/post/:id", async (req, res) => {
 
         console.log(onePost);
 
-        //  TO DO: Render post data to front end using single-post.handlebars
         res.render('post', { onePost });
 
     } catch (err) {
@@ -118,6 +122,9 @@ router.post("/post/:id", async (req, res) => {
             // Use session info to define the user_id 
             user_id: req.session.user_id
         })
+
+        console.log(newComment);
+        
         res.status(200).json({newComment, message : `Comment added!`})
 
     } catch (err) {

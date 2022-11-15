@@ -3,10 +3,27 @@
     <div class="card-body">
         <h4 class="text-left text-primary">{{onePost.content}}</h4>
     </div>
-    {{!-- If user is logged in, post's created_at timestamp is retrieved and rendered --}}
     <footer class="text-right">Posted by {{onePost.user.username}} - {{onePost.created_at}}</footer>
 </div>
 
   {{#each onePost.comments as |comment|}}
     {{> comment}}
     {{/each}}
+
+<div id="newComment" class="border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto">
+    <form class="comment-form">
+
+        <header class="h4 text-info text-left">Comment</header>
+        <textarea type="comment" class="form-control" id="newCommentText" placeholder="Add a comment..."></textarea>
+        <button class="w-75 btn mt-2 mb-2 btn-med btn-primary" id="newCommentBtn" type="submit">Comment</button>
+
+    </form>
+</section>
+</div>
+
+<!-- Including Bootstrap JS (with its jQuery dependency) so that dynamic components work -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- javascript file-->
+<script src="/js/comment.js"></script>

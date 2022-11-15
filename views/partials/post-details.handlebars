@@ -1,10 +1,14 @@
-<div id="post{{id}}" class="border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto">
-    <header class="h2 text-info">{{title}}</header>
-    <div class="card-body">
-        <h4 class="text-left text-primary">{{content}}</h4>
+
+<div class="border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto">
+    <div class="post" id="{{id}}">
+        <header class="h2 text-info" id="{{id}}">{{title}}</header>
+        <div class="card-body" id="{{id}}">
+            <h4 class="text-left text-primary" id="{{id}}">{{content}}</h4>
+        </div>
+        {{!-- If user is logged in, post's created_at timestamp is retrieved and rendered --}}
+        {{#if created_at}}
+        <footer class="text-right">Posted: {{created_at}}</footer>
+        {{/if}}
+        {{!-- <button class="postButton w-75 btn btn-med btn-success mlrb-auto mt-3" type="submit">View Post</button> --}}
     </div>
-    {{!-- If user is logged in, post's created_at timestamp is retrieved and rendered --}}
-    {{#if created_at}}
-    <footer class="text-right">Posted: {{created_at}}</footer>
-    {{/if}}
 </div>
