@@ -26,7 +26,6 @@ router.post('/', async (req, res) => {
                res.status(401).json({ message: 'Invalid credentials. Please try again.' });
                return; 
           }
-          
           // Use bcrypt compare method to compare the provided password against hashed password
           const validPassword = await bcrypt.compare(
                req.body.password,
@@ -37,20 +36,24 @@ router.post('/', async (req, res) => {
           if (!validPassword) {
                res.status(400).json({ message: 'Login failed. Please try again!' });
                return;
-          };
+          }
   
           // If password matches, serialize retrieved user data
           const currentUser = userData.get({ plain: true });
 
+          console.log(currentUser);
+
           // Save user's session
           req.session.save(() => {
-          req.session.logged_in = true;
+               req.session.loggedIn = true;
 
-          // Save the user's id to the session
-          req.session.user_id = currentUser.id;
+               // Save the user's id to the session
+               req.session.user_id = currentUser.id;
+
+               console.log(req.session);
+
+               res.json('Logged in successfully!');
           });
-
-          res.json('Logged in successfully!');
       } catch (err) {
           console.log(err)
           res.status(500).json(err)
@@ -79,22 +82,22 @@ router.post('/register', async (req, res) => {
                password: req.body.password
           });
 
-
         console.log(newUser);
 
         // Save user's session
         req.session.save(() => {
-        req.session.logged_in = true;
+        req.session.loggedIn = true;
 
         // Save the user's id to the session
         req.session.user_id = newUser.id;
+        res.status(200).json({newUser, message : 'Account created!'});
         });
 
-        res.status(200).json({newUser, message : 'Account created!'});
       } catch (err) {
           console.log(err)
           res.status(500).json(err)
       };
 });
+
 
 module.exports = router; 

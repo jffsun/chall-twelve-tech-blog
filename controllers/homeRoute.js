@@ -5,6 +5,8 @@ const { Post } = require("../models");
 // GET all Posts from Post table
 router.get("/", async (req, res) => {
     try {
+        console.log(req.session);
+        
         const postData = await Post.findAll({
             attributes: [
                 'id',

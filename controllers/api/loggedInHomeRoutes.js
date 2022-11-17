@@ -1,14 +1,26 @@
 const router = require('express').Router();
 const { User, Post, Comment } = require("../../models");
 const sequelize = require('../../config/connection');
+const auth = require('../../utils/auth'); 
 var colors = require('colors');
 
 // Routes mounted at ('/api/loggedIn')
 
 // GET all posts
 // TO DO: ADD - Require Authorization; 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
     try {
+
+        console.log(req.session);
+
+        console.log(req.session.id);
+
+        console.log('is user logged in? -----------');
+
+        console.log(req.session.loggedIn);
+
+        console.log(req.session.user_id);
+
         const postData = await Post.findAll({
             
             attributes: [
@@ -36,11 +48,8 @@ router.get("/", async (req, res) => {
         post.get({ plain: true })
         );
 
-        console.log(allPosts[0].created_at);
-        console.log(req.session.logged_in);
-
         // Render all posts with home.handlebars
-        res.render('home', { allPosts });
+        res.render('home', { allPosts, loggedIn: req.session.loggedIn });
 
     } catch (err) {
         console.log(err)
@@ -111,6 +120,10 @@ router.get("/post/:id", async (req, res) => {
 // TO DO: ADD - Require Authorization
 router.post("/post/:id", async (req, res) => {
     try {
+
+        console.log('User ID ------------');
+        console.log(req.session.user_id);
+
         const newComment = await Comment.create({
 
             // Define body of POST request
@@ -163,6 +176,18 @@ router.put("/post/:id", async (req, res) => {
         console.log(err)
         res.status(500).json(err)
     };
+});
+
+// End session and log user out
+router.post('/', (req, res) => {
+    if (req.session.loggedIn) {
+      // Remove the session variables
+        req.session.destroy(() => {
+        res.status(204).end();
+      });
+    } else {
+      res.status(404).end();
+    }
 });
 
 

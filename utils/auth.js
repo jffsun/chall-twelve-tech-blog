@@ -1,8 +1,9 @@
 const auth = (req, res, next) => {
     // If the user has not logged in, redirect to the login page
 
-    if (!req.session.logged_in) {
+    if (!req.session.loggedIn) {
       res.redirect('/');
+      next();
     // Else go to the next instance
     } else {
       next();
