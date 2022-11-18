@@ -30,9 +30,58 @@ const newCommentHandler = async (event) => {
   }
 };
 
+// Update comment
+const updateComment = async (event) => {
+    event.preventDefault();
 
-// Identifies which comments are created by the user
-const addupdateDeleteComments = async () => {
+    // Get id of the comment clicked from parent element
+    commentId = event.target.parentNode.id;
+
+    // Create text area for new comment to be input
+    let newTextArea = document.createElement("textarea");
+
+    newTextArea.setAttribute('placeholder','Enter updated comment here..')
+    newTextArea.setAttribute('id',`comment${commentId}`);
+
+
+    let submitBtn = document.createElement("button");
+    submitBtn.innerHTML = "Submit";
+    submitBtn.type = "click";
+
+    // Append text area and submit buttons to comment container
+    event.target.parentNode.appendChild(submitBtn);
+    event.target.parentNode.appendChild(newTextArea)
+
+    function submitUpdate () {
+       // targets inputs from that selected message
+      const updatedText = $(`#comment${commentId}`).val()
+      console.log(updatedText);
+    }
+    submitBtn.addEventListener("click", submitUpdate);
+  
+
+
+    // const response = await fetch('/api/teacher', {
+    // method: 'PUT',
+    // body: JSON.stringify({
+    //     id: containerID,
+    //     title: title,
+    //     message: message,
+    //     where: where,
+    //     when: when
+    // }),
+    // headers: {'Content-Type': 'application/json'}
+    // });
+    // if (response.ok) {
+    //     alert("Message updated!");
+    //     document.location.reload();
+    // } else { 
+    //     alert("Something went wrong. Can't update message");
+    // };
+};
+
+// Renders update and delete comment buttons for comments belonging to user 
+const updateDeleteComments = async () => {
 
   // Gets username of the current user from invisible element
   const currentUsername = $('.username').attr('id');
@@ -40,6 +89,7 @@ const addupdateDeleteComments = async () => {
   // Gets username of each comment
   const allComments = $('.comment')
 
+  // Compare each comment's username against current user's
   for (comment of allComments) {
     const commentUsername = comment.dataset.username;
     
@@ -49,8 +99,8 @@ const addupdateDeleteComments = async () => {
       let updateBtn = document.createElement("button");
       updateBtn.innerHTML = "Update";
 
-      // TO DO:
-      // updateBtn.onclick = updateComment();
+      // Run updateComment() when update button is clicked
+      updateBtn.setAttribute('onclick','updateComment(event)')
 
       let deleteBtn = document.createElement("button");
       deleteBtn.innerHTML = "Delete";

@@ -1,8 +1,4 @@
-<div class="comment border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto" data-username="{{user.username}}">
+<div class="comment border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto" data-username="{{user.username}}" id="{{id}}">
     <header class="h2 text-info">{{text}}</header>
     <footer class="username text-right">{{user.username}} - {{created_at}}</footer>
-    {{!-- Conditionally render buttons comment belongs to current user --}}
-    {{!-- {{#if (myComment)}}
-        <button class="w-5 btn mt-2 mb-2 ml-2 btn-med btn-warning" type="submit" id="">Update</button>
-    {{/if}} --}}
 </div>

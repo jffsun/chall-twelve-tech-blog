@@ -78,7 +78,9 @@ router.get("/post/:id", auth, async (req, res) => {
                     // Include the post's comments
                     model: Comment,
                      // Include comments.text, comments.user_id, and comments.created_at
-                    attributes: ['text', 
+                    attributes: [
+                    'id',
+                    'text', 
                     'user_id',
                     [
                         sequelize.fn ("DATE_FORMAT",
