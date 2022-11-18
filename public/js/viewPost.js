@@ -15,3 +15,8 @@ const viewPost = async (event) => {
 for (let post of postElements) {
     post.addEventListener("click", viewPost);
 }
+
+
+// console.log('Local Storage User ID?-----------');
+
+// console.log(localStorage.getItem('userId'));

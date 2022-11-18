@@ -29,6 +29,12 @@ const userLoginHandler = async (event) => {
       
       // If valid credentials, redirect user to loggedIn homepage
       if (response.ok) {
+
+        console.log(response);
+        
+        // Save the user's id to localStorage
+        // localStorage.setItem('userId', req.session.id);
+
         document.location.replace('/api/loggedIn');
 
       } else {

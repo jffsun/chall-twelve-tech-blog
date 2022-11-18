@@ -9,15 +9,7 @@ var colors = require('colors');
 // GET all posts with data created
 router.get("/", auth, async (req, res) => {
     try {
-        console.log('Logged in?-----------');
-
-        console.log(req.session.loggedIn);
-
-        console.log('User ID?-----------');
-
-        console.log(req.session.user_id);
-
-        const postData = await Post.findAll({
+           const postData = await Post.findAll({
             
             attributes: [
                 'id',
@@ -108,7 +100,9 @@ router.get("/post/:id", auth, async (req, res) => {
 
         console.log(onePost);
 
-        res.render('post', { onePost, session_user_id: req.session.user_id });
+        console.log(req.session.username);
+
+        res.render('post', { onePost, session_username: req.session.username });
 
     } catch (err) {
         console.log(err)

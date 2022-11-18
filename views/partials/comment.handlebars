@@ -1,11 +1,8 @@
-<div id="user-id-{{user.id}}" class="{{user.username}} border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto">
+<div class="comment border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto" data-username="{{user.username}}">
     <header class="h2 text-info">{{text}}</header>
-    <footer class="text-right">Commented by {{user.username}} - {{created_at}}</footer>
-
-    <h1 class="h2 text-info">Session User ID: {{sessionId}}</h1>
-    {{!-- If comment's user id = the session's user id, then display this button --}}
-    {{!-- {{#if (commentOwner )}}
+    <footer class="username text-right">{{user.username}} - {{created_at}}</footer>
+    {{!-- Conditionally render buttons comment belongs to current user --}}
+    {{!-- {{#if (myComment)}}
         <button class="w-5 btn mt-2 mb-2 ml-2 btn-med btn-warning" type="submit" id="">Update</button>
     {{/if}} --}}
-    
 </div>

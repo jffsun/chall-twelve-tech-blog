@@ -1,3 +1,7 @@
+{{!-- Invisible element to hold session username --}}
+<div class="username" id="{{session_username}}">
+</div>
+
 <div id="{{onePost.id}}" class="post border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto">
     <header class="h2 text-info">{{onePost.title}}</header>
     <div class="card-body">
@@ -5,8 +9,6 @@
     </div>
     <footer class="text-right">Posted by {{onePost.user.username}} - {{onePost.created_at}}</footer>
 </div>
-
-   <p>This user id should be 5 ---- {{session_user_id}} </p>
 
   {{#each onePost.comments as |comment|}}
     {{> comment sessionId=session_user_id}}
