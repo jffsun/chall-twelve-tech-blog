@@ -6,18 +6,14 @@ var colors = require('colors');
 
 // Routes mounted at ('/api/loggedIn')
 
-// GET all posts
-// TO DO: ADD - Require Authorization; 
+// GET all posts with data created
 router.get("/", auth, async (req, res) => {
     try {
-
-        console.log(req.session);
-
-        console.log(req.session.id);
-
-        console.log('is user logged in? -----------');
+        console.log('Logged in?-----------');
 
         console.log(req.session.loggedIn);
+
+        console.log('User ID?-----------');
 
         console.log(req.session.user_id);
 
@@ -58,13 +54,17 @@ router.get("/", auth, async (req, res) => {
 });
 
 // GET Post by ID and its comment(s)
-// TO DO: ADD - Require Authorization
-router.get("/post/:id", async (req, res) => {
+router.get("/post/:id", auth, async (req, res) => {
 
     try {
+
+        console.log('User ID?-----------');
+
+        console.log(req.session.user_id);
+
         const postData = await Post.findOne({
 
-            // Include post.id, post.title, post.content, and post.created_at timestamp
+            // Get post.id, post.title, post.content, and post.created_at
             attributes: [
                 'id',
                 'title',
@@ -80,7 +80,7 @@ router.get("/post/:id", async (req, res) => {
                 id: req.params.id
             },
             include: [
-                 // Include User of the post
+                 // Include User who wrote the post
                 { model: User },
                 { 
                     // Include the post's comments
@@ -108,7 +108,7 @@ router.get("/post/:id", async (req, res) => {
 
         console.log(onePost);
 
-        res.render('post', { onePost });
+        res.render('post', { onePost, session_user_id: req.session.user_id });
 
     } catch (err) {
         console.log(err)

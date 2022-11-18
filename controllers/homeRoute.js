@@ -2,10 +2,12 @@
 const router = require('express').Router();
 const { Post } = require("../models");
 
-// GET all Posts from Post table
+// GET all posts
 router.get("/", async (req, res) => {
     try {
-        console.log(req.session);
+        console.log('Logged in?-----------');
+
+        console.log(req.session.loggedIn);
         
         const postData = await Post.findAll({
             attributes: [
@@ -15,15 +17,15 @@ router.get("/", async (req, res) => {
             ],
         });
 
-        // Create array of each post retrieved
+        // Create array with each post retrieved
         const allPosts = postData.map((post) =>
 
-        // Serialize data
+        // Serialize each post's data
         post.get({ plain: true })
         );
 
         // Render all posts with home.handlebars
-        res.render('home', { allPosts });
+        res.render('home', { allPosts, loggedIn: req.session.loggedIn });
     
     // Handles errors
     } catch (err) {
