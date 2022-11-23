@@ -34,6 +34,7 @@ const newPostHandler = async (event) => {
 const updatePost = async (event) => {
   event.preventDefault();
 
+  // Disable button from adding more elements after being initially clicked
   event.target.disabled = true;
 
   // Get post.id of the post clicked
