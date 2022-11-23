@@ -3,7 +3,10 @@
   <h1 class="mb-1 text-light">Home</h1>
   <nav class="text-left">
     <a class="w-5 btn mt-2 mb-2 ml-2 btn-med btn-warning updateSubmit" href="/login"> Login </a>
+    {{#if loggedIn}}
     <button class="logOut w-5 btn mt-2 mb-2 ml-2 btn-med btn-warning" type="submit" id="logOut">Logout</button>
+    <a class="w-5 btn mt-2 mb-2 ml-2 btn-med btn-warning updateSubmit" href="/api/loggedIn/dashboard"> Dashboard </a>
+    {{/if}}
   </nav>
   </div>
 </header>

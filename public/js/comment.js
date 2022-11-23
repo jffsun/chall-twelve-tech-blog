@@ -1,9 +1,9 @@
-// Add new comment to a post
+// Adds a new comment to post
 const newCommentHandler = async (event) => {
 
   const newCommentText = document.querySelector('#newCommentText').value.trim();
 
-  // Get the post ID from the container
+  // Get the post ID from invisible document element
   const postId = document.getElementsByClassName("post")[0].id;
 
   // Stop browser from immediately submitting the form
@@ -30,58 +30,8 @@ const newCommentHandler = async (event) => {
   }
 };
 
-// Update comment
-const updateComment = async (event) => {
-    event.preventDefault();
-
-    // Get id of the comment clicked from parent element
-    commentId = event.target.parentNode.id;
-
-    // Create text area for new comment to be input
-    let newTextArea = document.createElement("textarea");
-
-    newTextArea.setAttribute('placeholder','Enter updated comment here..')
-    newTextArea.setAttribute('id',`comment${commentId}`);
-
-
-    let submitBtn = document.createElement("button");
-    submitBtn.innerHTML = "Submit";
-    submitBtn.type = "click";
-
-    // Append text area and submit buttons to comment container
-    event.target.parentNode.appendChild(submitBtn);
-    event.target.parentNode.appendChild(newTextArea)
-
-    function submitUpdate () {
-       // targets inputs from that selected message
-      const updatedText = $(`#comment${commentId}`).val()
-      console.log(updatedText);
-    }
-    submitBtn.addEventListener("click", submitUpdate);
-  
-
-
-    // const response = await fetch('/api/teacher', {
-    // method: 'PUT',
-    // body: JSON.stringify({
-    //     id: containerID,
-    //     title: title,
-    //     message: message,
-    //     where: where,
-    //     when: when
-    // }),
-    // headers: {'Content-Type': 'application/json'}
-    // });
-    // if (response.ok) {
-    //     alert("Message updated!");
-    //     document.location.reload();
-    // } else { 
-    //     alert("Something went wrong. Can't update message");
-    // };
-};
-
-// Renders update and delete comment buttons for comments belonging to user 
-const updateDeleteComments = async () => {
+// Renders update and delete comment buttons to comments belonging to user 
+const renderUpdateDeleteBtns = async () => {
 
   // Gets username of the current user from invisible element
   const currentUsername = $('.username').attr('id');
@@ -102,16 +52,110 @@ const updateDeleteComments = async () => {
       // Run updateComment() when update button is clicked
       updateBtn.setAttribute('onclick','updateComment(event)')
 
+      
       let deleteBtn = document.createElement("button");
       deleteBtn.innerHTML = "Delete";
 
       // TO DO:
-      // deleteBtn.onclick = deleteComment();
+      deleteBtn.id = 'deleteButton';
+      deleteBtn.setAttribute('onclick','deleteComment(event)')
 
       comment.appendChild(updateBtn);
       comment.appendChild(deleteBtn);
     };    
   };
+};
+
+// Updates a comment
+const updateComment = async (event) => {
+    event.preventDefault();
+
+    // Get comment.id of the comment clicked
+    commentId = event.target.parentNode.id;
+
+    // Create a text area for new comment to be input
+    let newTextArea = document.createElement("textarea");
+    newTextArea.setAttribute('placeholder','Enter updated comment here..')
+    newTextArea.setAttribute('id',`comment${commentId}`);
+
+    // Create a submit button to submit updated comment
+    let submitBtn = document.createElement("button");
+    submitBtn.innerHTML = "Submit";
+    submitBtn.type = "click";
+
+    // Append new elements comment container
+    event.target.parentNode.appendChild(submitBtn);
+    event.target.parentNode.appendChild(newTextArea)
+
+    // Submits updated comment
+    const submitUpdate = async (event) => {
+
+      // Get text from recently created text area
+      const updatedText = $(`#comment${commentId}`).val()
+      
+      // Get comment id
+      commentId = event.target.parentNode.id;
+
+      // Get post's id
+      const postId = document.getElementsByClassName("post")[0].id;
+      
+      // Put fetch request
+      if (updatedText) {
+        const response = await fetch(`/api/loggedIn/post/${postId}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            text: updatedText,
+            post_id: postId,
+            id: commentId,
+          }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+      
+        // Reload page to display new comment
+        if (response.ok) {
+          alert("Comment updated!")
+          document.location.reload();
+    
+        } else {
+          alert(response.statusText);
+        }
+      }
+    }
+    // Listen for submit button click
+    submitBtn.addEventListener("click", submitUpdate);
+};
+
+// Deletes comment
+const deleteComment = async (event) => {
+  event.preventDefault();
+  
+  // Get comment id
+  commentId = event.target.parentNode.id;
+
+  // Get post's id
+  const postId = document.getElementsByClassName("post")[0].id;
+  const deleteBtn = document.getElementById('deleteButton');
+  
+  // Delete fetch request
+  const response = await fetch(`/api/loggedIn/post/${postId}`, {
+    method: 'DELETE',
+    body: JSON.stringify({
+      id: commentId,
+    }),
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  // Reload page to display new comment
+  if (response.ok) {
+    alert("Comment deleted!")
+    document.location.reload();
+
+  } else {
+    alert(response.statusText);
+  }
+  
+  // Listen for delte button click
+  deleteBtn.addEventListener("click", deleteComment);
 };
 
 // Event listeners to run login and sign up functions upon submission
@@ -121,4 +165,4 @@ if(el) {
   el.addEventListener('submit', newCommentHandler);  
 };
 
-updateDeleteComments();
+renderUpdateDeleteBtns();

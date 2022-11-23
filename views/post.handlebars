@@ -1,3 +1,5 @@
+<a class="w-5 btn mt-2 mb-2 ml-2 btn-med btn-warning" href="/api/loggedIn">Go Back</a>
+
 {{!-- Invisible element to hold session username --}}
 <div class="username" id="{{session_username}}">
 </div>
@@ -11,7 +13,7 @@
 </div>
 
   {{#each onePost.comments as |comment|}}
-    {{> comment sessionId=session_user_id}}
+    {{> comment}}
     {{/each}}
 
 

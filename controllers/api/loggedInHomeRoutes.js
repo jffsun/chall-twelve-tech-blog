@@ -6,25 +6,23 @@ var colors = require('colors');
 
 // Routes mounted at ('/api/loggedIn')
 
-// GET all posts with data created
+// GET all posts
 router.get("/", auth, async (req, res) => {
+
+    console.log(req.session.user_id);
     try {
-           const postData = await Post.findAll({
+            const postData = await Post.findAll({
             
             attributes: [
                 'id',
                 'title',
                 'content',
-                // GET timestamp of post creation since user is logged in
+                // Convert YYYY-MM-DDTHH:MM:SSZ timestamp format to MM-DD-YYYY
                 [
-                    sequelize.fn
-                    (
-                      // Convert YYYY-MM-DDTHH:MM:SSZ timestamp format to MM-DD-YYYY
-                      "DATE_FORMAT", 
-                      sequelize.col("created_at"), 
-                      "%m/%d/%Y"
-                    ),
-                    "created_at",
+                    sequelize.fn ("DATE_FORMAT",
+                    sequelize.col("post.created_at"), 
+                    "%m/%d/%Y"),
+                    "created_at"
                 ],
             ],
         });
@@ -45,15 +43,10 @@ router.get("/", auth, async (req, res) => {
     };
 });
 
+
 // GET Post by ID and its comment(s)
 router.get("/post/:id", auth, async (req, res) => {
-
     try {
-
-        console.log('User ID?-----------');
-
-        console.log(req.session.user_id);
-
         const postData = await Post.findOne({
 
             // Get post.id, post.title, post.content, and post.created_at
@@ -72,12 +65,11 @@ router.get("/post/:id", auth, async (req, res) => {
                 id: req.params.id
             },
             include: [
-                 // Include User who wrote the post
+                 // Include user who wrote the post
                 { model: User },
-                { 
-                    // Include the post's comments
-                    model: Comment,
-                     // Include comments.text, comments.user_id, and comments.created_at
+
+                // Include the post's comments
+                { model: Comment,
                     attributes: [
                     'id',
                     'text', 
@@ -89,21 +81,15 @@ router.get("/post/:id", auth, async (req, res) => {
                         "created_at"
                     ],
                     ], 
-                    include: [{
-                        // Include usernames of those who posted comments
-                        model: User
-                    }],
+                    // Include usernames of those who posted comments
+                    include: { model: User },
                 },
             ],
         });
-
         // Serialize data retrieved
         const onePost = postData.get({ plain: true });
 
-        console.log(onePost);
-
-        console.log(req.session.username);
-
+        // Render data to post.handlebars
         res.render('post', { onePost, session_username: req.session.username });
 
     } catch (err) {
@@ -113,61 +99,54 @@ router.get("/post/:id", auth, async (req, res) => {
 });
 
 // POST a comment to a post 
-// TO DO: ADD - Require Authorization
-router.post("/post/:id", async (req, res) => {
+router.post("/post/:id", auth, async (req, res) => {
     try {
-
-        console.log('User ID ------------');
-        console.log(req.session.user_id);
-
         const newComment = await Comment.create({
-
-            // Define body of POST request
             text: req.body.text,
 
-            // Id taken from URL
+            // Post's ID taken from URL
             post_id: req.params.id,
 
+            // User_id pulled from from session
+            user_id: req.session.user_id
+        });
+        res.status(200).json({newComment, message : `Comment added!`});
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    };
+});
+
+// UPDATE a comment of a post
+router.put("/post/:id", auth, async (req, res) => {
+    try {
+        const updatedComment = await Comment.update({
+
+            text: req.body.text,
+            post_id: req.params.id,
             // Use session info to define the user_id 
             user_id: req.session.user_id
-        })
-
-        console.log(newComment);
-        
-        res.status(200).json({newComment, message : `Comment added!`})
-
+        },
+        { where: {
+                id: req.body.id
+            },
+        });
+        res.status(200).json({updatedComment, message : `Comment updated!`})
     } catch (err) {
         console.log(err)
         res.status(500).json(err)
     };
 });
 
-// UPDATE a comment of a post
-// TO DO: ADD - Require Authorization
-router.put("/post/:id", async (req, res) => {
+// DELETE a comment of a post
+router.delete("/post/:id", auth, async (req, res) => {
     try {
-        const updatedComment = await Comment.update({
-
-            // Define body of POST request
-            text: req.body.text,
-
-            // Updating the comment of the post ID in the URL
-            post_id: req.params.id,
-
-            // Use session info to define the user_id 
-            user_id: req.session.user_id
-        },
-        {
-            // Will target the comment that user clicks on (FRONT END
-            // FE: Give each comment a container ID, get ID upon click, include that ID in req.body of fetch request
-            // 
+        const deletedComment = await Comment.destroy({
             where: {
                 id: req.body.id
             },
-        }
-        )
-        res.status(200).json({updatedComment, message : `Comment updated!`})
-
+        });
+        res.status(200).json({deletedComment, message : `Comment deleted!`})
     } catch (err) {
         console.log(err)
         res.status(500).json(err)
@@ -185,6 +164,5 @@ router.post('/', (req, res) => {
       res.status(404).end();
     }
 });
-
 
 module.exports = router;

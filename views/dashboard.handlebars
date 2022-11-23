@@ -1,0 +1,30 @@
+<header>
+  <div class="pt-3 text-center bg-primary opacity-100" style="margin-top: 0px;">
+  <h1 class="mb-1 text-light">Dashboard</h1>
+  <nav class="text-left">
+    <a class="w-5 btn mt-2 mb-2 ml-2 btn-med btn-warning" href="/api/loggedIn"> Go Back </a>
+  </nav>
+  </div>
+</header>
+
+<button class="new-post w-5 btn mt-2 mb-2 ml-2 btn-med btn-success" type="click" id="newPostButton">New Post</button>
+
+<div id="newComment" class="border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto">
+    <form class="comment-form">
+
+        <header class="h4 text-info text-left">New Post</header>
+        <textarea class="form-control" rows="1" cols="15" id="newTitle" placeholder="Post Title"></textarea>
+        <textarea class="form-control" rows="4" cols="15" id="newContent" placeholder="Write your post here..."></textarea>
+        <button class="w-75 btn mt-2 mb-2 btn-med btn-primary" id="newPostBtn" type="submit">Post</button>
+
+    </form>
+</section>
+</div>
+
+<section class="container">
+  <div class="flex-row overflow-auto list">
+    {{#each allMyPosts as |post|}}
+    {{> post-details}}
+    {{/each}}
+  </div>
+</section>

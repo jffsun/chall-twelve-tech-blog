@@ -9,6 +9,7 @@ var colors = require('colors');
 router.get("/", async (req, res) => {
     try {    
         console.log(req.session.user_id);
+        console.log(req.session);
 
         const myPostData = await Post.findAll({
             // TO DO: Request not picking up session.user_id
@@ -33,10 +34,8 @@ router.get("/", async (req, res) => {
         post.get({ plain: true })
         );
 
-        res.status(200).json(allMyPosts);
-
         // TO DO: Render data to front end using dashboard.handlebars
-        // res.render('dashboard', { allMyPosts });
+        res.render('dashboard', { allMyPosts });
 
     } catch (err) {
         console.log(err)

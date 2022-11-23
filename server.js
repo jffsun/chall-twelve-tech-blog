@@ -12,13 +12,6 @@ const PORT = process.env.PORT || 3001;
 
 // Instance of Express handlebars
 const hbs = exphbs.create({
-  helpers: {
-    commentOwner: function(sessionId, commentUserId) {
-      if (commentUserId == sessionId) {
-        return true;
-      }
-    }
-  }
 });
 
 // Define session attributes
