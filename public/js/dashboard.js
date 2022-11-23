@@ -6,9 +6,11 @@ const newPost = async (event) => {
     commentId = event.target.parentNode.id;
 
     // Create a text area for new comment to be input
-    let newTextArea = document.createElement("textarea");
-    newTextArea.setAttribute('placeholder','Enter updated comment here..')
-    newTextArea.setAttribute('id',`comment${commentId}`);
+    let newTitle = document.createElement("textarea");
+    let newContent = document.createElement("textarea");
+    newTitle.setAttribute('placeholder', 'TITLE')
+    newContent.setAttribute('placeholder','Type your post here...')
+    newTextArea.setAttribute('id','newPost');
 
     // Create a submit button to submit updated comment
     let submitBtn = document.createElement("button");
