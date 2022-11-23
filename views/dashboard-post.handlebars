@@ -9,11 +9,11 @@
     <div class="card-body">
         <h4 class="text-left text-primary">{{dashboardPost.content}}</h4>
     </div>
-    <footer class="text-right">Posted - {{dashboardPost.created_at}}
-        <button id="updatePostBtn" onclick="updatePost(event)" class="w-75 btn mt-2 mb-2 btn-med btn-primary btn-warning">Update</button>
+    <footer class="text-right">Posted - {{dashboardPost.created_at}} </footer>
+    <div class="update-delete">
+        <button id="updatePostBtn" onclick="updatePost(event)" class="w-75 btn mt-2 mb-2 btn-med btn-primary btn-primary">Update</button>
         <button id="deletePostBtn" onclick="deletePost(event)" class="w-75 btn mt-2 mb-2 btn-med btn-primary btn-danger">Delete</button>
-    </footer>
-
+    </div>
 </div>
 
 <!-- Including Bootstrap JS (with its jQuery dependency) so that dynamic components work -->

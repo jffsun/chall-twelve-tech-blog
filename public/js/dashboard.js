@@ -1,8 +1,8 @@
 // Handles submitting a new post
 const newPostHandler = async (event) => {
 
-   // Stop browser from immediately submitting the form
-   event.preventDefault();
+  // Stop browser from immediately submitting the form
+  event.preventDefault();
 
   const newTitle = document.querySelector('#newTitle').value.trim();
   const newContent = document.querySelector('#newContent').value.trim();
@@ -34,8 +34,13 @@ const newPostHandler = async (event) => {
 const updatePost = async (event) => {
   event.preventDefault();
 
+  event.target.disabled = true;
+
   // Get post.id of the post clicked
   postId = event.target.parentNode.id;
+
+  let newPostContainer = document.createElement("div");
+  newPostContainer.style.display = 'grid';
 
   // Create text areas for new post title and content
   let newTitleTextArea = document.createElement("textarea");
@@ -45,16 +50,20 @@ const updatePost = async (event) => {
   let newContentTextArea = document.createElement("textarea");
   newContentTextArea.setAttribute('placeholder','Enter new content...')
   newContentTextArea.setAttribute('id',`postContent${postId}`);
+  newContentTextArea.setAttribute('rows','4');
 
   // Create a submit button to submit updated comment
   let submitBtn = document.createElement("button");
   submitBtn.innerHTML = "Submit";
   submitBtn.type = "click";
 
-  // Append new elements comment container
-  event.target.parentNode.appendChild(newTitleTextArea);
-  event.target.parentNode.appendChild(newContentTextArea);
-  event.target.parentNode.appendChild(submitBtn);
+  // Append post container
+  event.target.parentNode.appendChild(newPostContainer);
+
+  // Append new elements to post container
+  newPostContainer.appendChild(newTitleTextArea);
+  newPostContainer.appendChild(newContentTextArea);
+  newPostContainer.appendChild(submitBtn);
 
   // Submits updated comment
   const submitPostUpdate = async (event) => {
@@ -67,7 +76,7 @@ const updatePost = async (event) => {
     const userId = document.getElementsByTagName("header")[0].id;
 
     // Get post's id
-    postId = event.target.parentNode.parentNode.id;
+    postId = event.target.parentNode.parentNode.parentNode.id;
     
     // Put fetch request
     if (updatedTitle && updatedContent) {

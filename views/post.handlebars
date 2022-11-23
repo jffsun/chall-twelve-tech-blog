@@ -1,24 +1,20 @@
-<link rel="stylesheet" href="../public/css/style.css">
-
 <a class="w-5 btn mt-2 mb-2 ml-2 btn-med btn-warning" href="/api/loggedIn">Go Back</a>
 
 {{!-- Invisible element to hold session username --}}
 <div class="username" id="{{session_username}}">
 </div>
 
-<div id="{{onePost.id}}" class="post border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto">
+<div id="{{onePost.id}}" class="post border mt-3 w-55 border-info rounded ml-auto mr-auto mh-25 overflow-auto">
     <header class="h2 text-info">{{onePost.title}}</header>
     <div class="card-body">
         <h4 class="text-left text-primary">{{onePost.content}}</h4>
     </div>
-    <footer class="text-right">Posted by {{onePost.user.username}} - {{onePost.created_at}}</footer>
+    <h5 class="text-right text-secondary">Posted by {{onePost.user.username}} - {{onePost.created_at}}</h5>
 </div>
-
   {{#each onePost.comments as |comment|}}
     {{> comment}}
     {{/each}}
-
-
+<br>
 <div id="newComment" class="border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto">
     <form class="comment-form">
 

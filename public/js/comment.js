@@ -66,8 +66,14 @@ const renderUpdateDeleteBtns = async () => {
 const updateComment = async (event) => {
     event.preventDefault();
 
+    // Disable button from adding more elements after being initially clicked
+    event.target.disabled = true;
+
     // Get comment.id of the comment clicked
     commentId = event.target.parentNode.id;
+
+    let newCommentContainer = document.createElement("div");
+    newCommentContainer.style.display = 'grid';
 
     // Create a text area for new comment to be input
     let newTextArea = document.createElement("textarea");
@@ -80,9 +86,12 @@ const updateComment = async (event) => {
     submitBtn.innerHTML = "Submit";
     submitBtn.type = "click";
 
-    // Append new elements comment container
-    event.target.parentNode.appendChild(newTextArea)
-    event.target.parentNode.appendChild(submitBtn);
+    // Append comment container
+    event.target.parentNode.appendChild(newCommentContainer);
+
+    // Append new elements to comment container
+    newCommentContainer.appendChild(newTextArea);
+    newCommentContainer.appendChild(submitBtn);
 
     // Submits updated comment
     const submitCommentUpdate = async (event) => {
@@ -91,7 +100,7 @@ const updateComment = async (event) => {
       const updatedText = $(`#comment${commentId}`).val()
       
       // Get comment id
-      commentId = event.target.parentNode.id;
+      commentId = event.target.parentNode.parentNode.id;
 
       // Get post's id
       const postId = document.getElementsByClassName("post")[0].id;
