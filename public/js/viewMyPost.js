@@ -8,7 +8,7 @@ const viewPost = async (event) => {
     postId = event.target.getAttribute('id')    
 
     // Redirect user to endpoint of selected post 
-    document.location.replace(`/api/loggedIn/post/${postId}`);
+    document.location.replace(`/api/loggedIn/dashboard/mypost/${postId}`);
 }
 
 // Add event listener that runs viewPost upon click to each post

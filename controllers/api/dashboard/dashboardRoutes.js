@@ -1,18 +1,18 @@
 const router = require('express').Router();
 const { User, Post, Comment } = require("../../../models");
+const sequelize = require('../../../config/connection');
+const auth = require('../../../utils/auth'); 
 var colors = require('colors');
 
 // Routes mounted at ('/api/loggedIn/dashboard') 
 
 // GET all posts from User logged in
-// TO DO: ADD - Require Authorization
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
     try {    
         console.log(req.session.user_id);
         console.log(req.session);
 
         const myPostData = await Post.findAll({
-            // TO DO: Request not picking up session.user_id
             where: {
                 user_id: req.session.user_id
             },
@@ -20,11 +20,14 @@ router.get("/", async (req, res) => {
             attributes: [
                 'id',
                 'title',
-                'content',
-                // Specify created date since user is logged in
-                // TO DO: Format to only show date  
-                'created_at'
-            ]
+                'content', 
+                [
+                    sequelize.fn ("DATE_FORMAT",
+                    sequelize.col("post.created_at"), 
+                    "%m/%d/%Y"),
+                    "created_at"
+                ],
+            ],
         });
 
         // Create array of each post retrieved
@@ -35,7 +38,7 @@ router.get("/", async (req, res) => {
         );
 
         // TO DO: Render data to front end using dashboard.handlebars
-        res.render('dashboard', { allMyPosts });
+        res.render('dashboard', { allMyPosts, user_id: req.session.user_id });
 
     } catch (err) {
         console.log(err)
@@ -43,9 +46,8 @@ router.get("/", async (req, res) => {
     };
 });
 
-// POST a post from dashboard 
-// TO DO: ADD - Require Authorization
-router.post("/", async (req, res) => {
+// POST a new post 
+router.post("/", auth, async (req, res) => {
     try {
         const newPost = await Post.create({
 
@@ -54,7 +56,7 @@ router.post("/", async (req, res) => {
             content: req.body.content,
 
             // Use session info to define the user_id 
-            user_id: req.session.user_id
+            user_id: req.body.user_id
         });
         res.status(200).json({newPost, message : `Post added!`})
 
@@ -66,14 +68,10 @@ router.post("/", async (req, res) => {
 
 
 // GET a post from dashboard by ID
-// TO DO: ADD - Require Authorization
-router.get("/mypost/:id", async (req, res) => {
-
+router.get("/mypost/:id", auth, async (req, res) => {
     try {
-
         const dashboardPostData = await Post.findOne({
 
-            // ID will be retrieved with front end JS
             where: {
                 id: req.params.id
             },
@@ -81,21 +79,23 @@ router.get("/mypost/:id", async (req, res) => {
                 { model: Comment },
             ],
             attributes: [
+                'id',
                 'title',
                 'content',
-                // Specify created date since user is logged in
-                // TO DO: Format to show shorthand date  
-                'created_at'
+                [
+                    sequelize.fn ("DATE_FORMAT",
+                    sequelize.col("post.created_at"), 
+                    "%m/%d/%Y"),
+                    "created_at"
+                ],
             ],
         });
 
         // Serialize data retrieved
         const dashboardPost = dashboardPostData.get({ plain: true });
 
-        res.status(200).json(dashboardPost);
-
-        //  TO DO: Render post data to front end using single-post.handlebars
-        // res.render('post', { OnePost });
+        //  Render dashboard post data to front end using dashboard-post.handlebars
+        res.render('dashboard-post', { dashboardPost });
 
     } catch (err) {
         console.log(err)
@@ -103,27 +103,8 @@ router.get("/mypost/:id", async (req, res) => {
     };
 });
 
-// Delete a post from user's dashboard
-// TO DO: ADD - Require Authorization
-router.delete("/mypost/:id", async (req, res) => {
-    try {
-
-    const deletedPost = await Post.destroy({
-        where: {
-            id: req.params.id,
-        },
-    });
-    res.status(200).json(deletedPost);
-
-    } catch(err) {
-        console.log(err);
-        res.status(500).json(err);
-    };
-});
-
 // Update a post from user's dashboard 
-// TO DO: ADD - Require Authorization
-router.put("/mypost/:id", async (req, res) => {
+router.put("/mypost/:id", auth, async (req, res) => {
     try {
         const updatePost = await Post.update({
             
@@ -144,5 +125,24 @@ router.put("/mypost/:id", async (req, res) => {
         res.status(500).json(err)
     };
 });
+
+// Delete a post from user's dashboard
+router.delete("/mypost/:id", auth, async (req, res) => {
+    try {
+
+    const deletedPost = await Post.destroy({
+        where: {
+            id: req.params.id,
+        },
+    });
+    res.status(200).json(deletedPost);
+
+    } catch(err) {
+        console.log(err);
+        res.status(500).json(err);
+    };
+});
+
+
 
 module.exports = router;

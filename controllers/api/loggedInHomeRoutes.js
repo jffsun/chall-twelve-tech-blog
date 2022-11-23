@@ -43,7 +43,6 @@ router.get("/", auth, async (req, res) => {
     };
 });
 
-
 // GET Post by ID and its comment(s)
 router.get("/post/:id", auth, async (req, res) => {
     try {
@@ -124,6 +123,7 @@ router.put("/post/:id", auth, async (req, res) => {
 
             text: req.body.text,
             post_id: req.params.id,
+
             // Use session info to define the user_id 
             user_id: req.session.user_id
         },
@@ -156,7 +156,8 @@ router.delete("/post/:id", auth, async (req, res) => {
 // End session and log user out
 router.post('/', (req, res) => {
     if (req.session.loggedIn) {
-      // Remove the session variables
+
+        // Remove the session variables
         req.session.destroy(() => {
         res.status(204).end();
       });

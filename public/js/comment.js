@@ -21,13 +21,13 @@ const newCommentHandler = async (event) => {
   
     // Reload page to display new comment
     if (response.ok) {
-      alert("Comment added!")
+      alert("Comment added!");
       document.location.reload();
 
     } else {
       alert(response.statusText);
-    }
-  }
+    };
+  };
 };
 
 // Renders update and delete comment buttons to comments belonging to user 
@@ -51,13 +51,9 @@ const renderUpdateDeleteBtns = async () => {
 
       // Run updateComment() when update button is clicked
       updateBtn.setAttribute('onclick','updateComment(event)')
-
       
       let deleteBtn = document.createElement("button");
       deleteBtn.innerHTML = "Delete";
-
-      // TO DO:
-      deleteBtn.id = 'deleteButton';
       deleteBtn.setAttribute('onclick','deleteComment(event)')
 
       comment.appendChild(updateBtn);
@@ -77,6 +73,7 @@ const updateComment = async (event) => {
     let newTextArea = document.createElement("textarea");
     newTextArea.setAttribute('placeholder','Enter updated comment here..')
     newTextArea.setAttribute('id',`comment${commentId}`);
+    newTextArea.setAttribute('class','commentTextArea');
 
     // Create a submit button to submit updated comment
     let submitBtn = document.createElement("button");
@@ -84,11 +81,11 @@ const updateComment = async (event) => {
     submitBtn.type = "click";
 
     // Append new elements comment container
-    event.target.parentNode.appendChild(submitBtn);
     event.target.parentNode.appendChild(newTextArea)
+    event.target.parentNode.appendChild(submitBtn);
 
     // Submits updated comment
-    const submitUpdate = async (event) => {
+    const submitCommentUpdate = async (event) => {
 
       // Get text from recently created text area
       const updatedText = $(`#comment${commentId}`).val()
@@ -122,7 +119,7 @@ const updateComment = async (event) => {
       }
     }
     // Listen for submit button click
-    submitBtn.addEventListener("click", submitUpdate);
+    submitBtn.addEventListener("click", submitCommentUpdate);
 };
 
 // Deletes comment
@@ -154,7 +151,7 @@ const deleteComment = async (event) => {
     alert(response.statusText);
   }
   
-  // Listen for delte button click
+  // Listen for delete button click
   deleteBtn.addEventListener("click", deleteComment);
 };
 

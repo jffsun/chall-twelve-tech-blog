@@ -1,0 +1,24 @@
+<a class="w-5 btn mt-2 mb-2 ml-2 btn-med btn-warning" href="/api/loggedIn/dashboard">Go Back</a>
+
+{{!-- Invisible element to hold session username --}}
+<div class="username" id="{{session_username}}">
+</div>
+
+<div id="{{dashboardPost.id}}" class="post border mt-3 w-50 border-info rounded ml-auto mr-auto mh-25 overflow-auto">
+    <header class="h2 text-info">{{dashboardPost.title}}</header>
+    <div class="card-body">
+        <h4 class="text-left text-primary">{{dashboardPost.content}}</h4>
+    </div>
+    <footer class="text-right">Posted - {{dashboardPost.created_at}}
+        <button id="updatePostBtn" onclick="updatePost(event)" class="w-75 btn mt-2 mb-2 btn-med btn-primary btn-warning">Update</button>
+        <button id="deletePostBtn" onclick="deletePost(event)" class="w-75 btn mt-2 mb-2 btn-med btn-primary btn-danger">Delete</button>
+    </footer>
+
+</div>
+
+<!-- Including Bootstrap JS (with its jQuery dependency) so that dynamic components work -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- javascript file-->
+<script src="/js/dashboard.js"></script>
