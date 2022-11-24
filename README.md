@@ -49,7 +49,7 @@ After registering an account, they are logged in and taken to the homepage. They
 ## View a Post
 
 
-Now that the user is logged in, they may view posts, the creator of the posts, and its comments. 
+Now that the user is logged in, they may view click on existing posts. Once they do, they can view the author of the post, its comments, and the authors of the comments. 
 
 
 ![One Post](./public/images/one-post.png)
@@ -58,16 +58,18 @@ Now that the user is logged in, they may view posts, the creator of the posts, a
 ## Commenting
 
 
-The user can add a comment to a post, update that comment, or delete it.
+The user can add a comment to a post, update that comment, or delete it. The first image is after the user writes a new comment. After clicking the 'Update' button, a text area appears for the user to update that comment'. Once the comment is updated, the page refreshes and the updated comment is displayed.
+
 
 ![New Comment](./public/images/new-comment.png)
-![Update Comment](./public/images/comment-reload.png)
+![Comment Reload](./public/images/comment-reload.png)
 
 
 ## Dashboard
 
 
-In the dashboard, are posts that only the currrent user posted. After the user writes a post, they may click on it to update or delete it.
+The dashboard only contains posts that only the currrent user posted. After the user writes a post, they may click on it to update or delete it.
+After a post is updated or deleted, the page refreshes and their dashboard reflects the changes made.
 
 ![Dashboard](./public/images/dashboard.png)
 ![Dashboard Posted](./public/images/dashboard-posted.png)
@@ -75,5 +77,25 @@ In the dashboard, are posts that only the currrent user posted. After the user w
 ![Dashboard Update](./public/images/dashboard-update.png)
 
 
+## Logout
+
+The user may log out with the 'Log Out' button. Afterwards, they are logged out, they are back the homepage and are unable to click into posts or navigate to the dashboard.
+
+![Logout](./public/images/logout.gif)
+
+
+## Heroku Update Comment Session Delay Bug
+
+The deployed Heroku application experiences delay in recognizing the user's session. The appplication uses the user's session to recognize which comments belong to the user and renders an update and delete button to their comments. Unfortunately, since the session takes time to save user info to the session, these buttons don't instantly appear on the Heroku app after signing in. Below is a video demonstrating this functionality on the local server. I log in, view a post, view the update and delete buttons with my comments, and then update and delete these comments. 
+
+When demo'ing the Heroku, please wait about 5-10 minutes for these update and delete buttons to render on comments.
+
+[Update and Delete Heroku Session Bug](https://drive.google.com/file/d/18I8r75B9hF2ORcCUw8NplNJkrNVAKoKk/view)
+
+
 ### Link to Github Repository
-[https://github.com/jffsun/chall-eleven-ecommerce](https://github.com/jffsun/chall-eleven-ecommerce)
+[https://github.com/jffsun/chall-twelve-tech-blog](https://github.com/jffsun/chall-tech-blog)
+
+
+### Link to Deployed Heroku Application
+[https://glacial-castle-86468.herokuapp.com/](https://glacial-castle-86468.herokuapp.com/)
