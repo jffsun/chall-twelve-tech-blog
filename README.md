@@ -14,14 +14,18 @@ Controller - Converts commands for the model or view
 
 This tech blog application uses MySQL as a database, Sequelize as an ORM, Express to manage server and routes, the express-session npm package to handle user authentification, and Handlebars for  templating. Additionally, Insomnia Core was used to test routes during development.  
 
+
 ### Application 
 
+
 The following screenshots show the application and demonstrate some of its functionality. 
+
 
 ## Home Page (Logged Out)
 
 
 When the user first opens the application, they are able to view existing posts, but cannot click on posts nor view the dashboard. 
+
 
 ![Home Page (Logged Out)](./public/images/home-logged-out.png)
 
@@ -58,7 +62,7 @@ Now that the user is logged in, they may view click on existing posts. Once they
 ## Commenting
 
 
-The user can add a comment to a post, update that comment, or delete it. The first image is after the user writes a new comment. After clicking the 'Update' button, a text area appears for the user to update that comment'. Once the comment is updated, the page refreshes and the updated comment is displayed.
+The user can add a comment to a post, update that comment, or delete it. The first image shows the post after the user writes a new comment. After clicking the 'Update' button, a text area appears for the user to type the updated comment. Once a comment is updated or deleted, the page refreshes and the changes are reflected.
 
 
 ![New Comment](./public/images/new-comment.png)
@@ -71,6 +75,7 @@ The user can add a comment to a post, update that comment, or delete it. The fir
 The dashboard only contains posts that only the currrent user posted. After the user writes a post, they may click on it to update or delete it.
 After a post is updated or deleted, the page refreshes and their dashboard reflects the changes made.
 
+
 ![Dashboard](./public/images/dashboard.png)
 ![Dashboard Posted](./public/images/dashboard-posted.png)
 ![Dashboard My Post](./public/images/dashboard-mypost.png)
@@ -79,16 +84,19 @@ After a post is updated or deleted, the page refreshes and their dashboard refle
 
 ## Logout
 
+
 The user may log out with the 'Log Out' button. Afterwards, they are logged out, they are back the homepage and are unable to click into posts or navigate to the dashboard.
+
 
 ![Logout](./public/images/logout.gif)
 
 
 ## Heroku Update Comment Session Delay Bug
 
-The deployed Heroku application experiences delay in recognizing the user's session. The appplication uses the user's session to recognize which comments belong to the user and renders an update and delete button to their comments. Unfortunately, since the session takes time to save user info to the session, these buttons don't instantly appear on the Heroku app after signing in. Below is a video demonstrating this functionality on the local server. I log in, view a post, view the update and delete buttons with my comments, and then update and delete these comments. 
 
-When demo'ing the Heroku, please wait about 5-10 minutes for these update and delete buttons to render on comments.
+The deployed Heroku application experiences delay in recognizing the user's session. The application uses the user's session to recognize which comments belong to the user and renders an update and delete button to their comments. Unfortunately, since the session takes time to save user info to the session, these buttons don't instantly appear on the Heroku app after signing in. Below is a video demonstrating this functionality on the local server. I log in, view a post, view the update and delete buttons with my comments, and then update and delete these comments. 
+
+When demo'ing the Heroku, please wait about 5-10 minutes for these update and delete buttons to render on your comments.
 
 [Update and Delete Heroku Session Bug](https://drive.google.com/file/d/18I8r75B9hF2ORcCUw8NplNJkrNVAKoKk/view)
 
